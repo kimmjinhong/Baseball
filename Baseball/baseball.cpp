@@ -9,6 +9,7 @@ struct GuessResult {
 };
 
 class Baseball {
+	const int STRING_LENGTH = 3;
 public:
 	explicit Baseball(const string& question)
 		:question(question) {
@@ -18,10 +19,24 @@ public:
 	GuessResult guess(const string& guessNumber) {
 		assertIllegalArgument(guessNumber);
 		if (guessNumber == question) {
-			return { true, 3, 0 };
+			return { true, STRING_LENGTH, 0 };
 		}
+		int strikes = 0;
+		int balls = 0;
+		for (int i = 0; i < STRING_LENGTH; i++) {
+			for (int j = 0; j < STRING_LENGTH; j++) {
+				if (i == j && guessNumber[i] == question[i]) {
+					strikes++;
+					break;
+				}
+				if (guessNumber[i] == question[j]) {
+					balls++;
+					break;
+				}
+			}
+		}
+		return { false, strikes, balls };
 
-		return { false, 0, 0 };
 	}
 	void assertIllegalArgument(const std::string& guessNumber)
 	{
